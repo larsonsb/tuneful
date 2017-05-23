@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
+from flask import url_for
 
 from tuneful import app
 
@@ -19,11 +20,11 @@ class File(Base):
     song = relationship("Song", uselist=False, backref="song_file")
     
     def as_dictionary(self):
-        file_dict = {
+        return {
             "id": self.id,
-            "name": self.filename
+            "name": self.filename,
+            "path": url_for("uploaded_file", filename=self.filename)
         }
-        return file_dict
 
 class Song(Base):
     __tablename__ = 'song'
